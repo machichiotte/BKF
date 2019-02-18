@@ -1,6 +1,5 @@
 package com.whitedev.bkf.fragment
 
-import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
@@ -9,7 +8,10 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.CheckBox
+import android.widget.TableRow
+import android.widget.TextView
+import android.widget.Toast
 import com.whitedev.bkf.Constants
 import com.whitedev.bkf.InterfaceApi
 import com.whitedev.bkf.R
@@ -38,12 +40,8 @@ class PlanningFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        //addDynamicTable()
-
-
         getListColumnAtelier()
     }
-
 
     private lateinit var token: String
     lateinit var listColumn: List<TableList>
@@ -90,22 +88,14 @@ class PlanningFragment : Fragment() {
 
 
     private fun addDynamicTable(columnList: List<TableList>) {
-        //val table = TableLayout(activity)
         val table = table_lay
-
-        //table.isStretchAllColumns = true
-        //table.showDividers = LinearLayout.SHOW_DIVIDER_MIDDLE
-        //table.dividerDrawable = this.resources.getDrawable(R.drawable.cell_background)
-
-        //table.setBackground(borderDrawable(2));
-        //table.setPadding(4,4,4,4);
 
         for (i in 0..9) {
 
             val tableRow = arrayOfNulls<TableRow>(10)
             tableRow[i] = TableRow(activity)
 
-            tableRow[i]?.let {tableR ->
+            tableRow[i]?.let { tableR ->
                 tableR.gravity = Gravity.CENTER
 
                 for (tablel in columnList) {
@@ -115,18 +105,19 @@ class PlanningFragment : Fragment() {
                             val tv = TextView(activity)
                             //tv.gravity = Gravity.START
 
-                            tv.setBackgroundColor(ContextCompat.getColor(context!!,android.R.color.white))
+                            tv.setBackgroundColor(ContextCompat.getColor(context!!, android.R.color.white))
 
-                           // if (tablel.display)
-                                tv.text = tablel.name
-                           // else tv.text = ""
+                            // if (tablel.display)
+                            tv.text = tablel.name
+                            // else tv.text = ""
 
-                           // tv.setPadding(4, 20, 4, 20)
-                           // tv.background = borderDrawable(2)
+                            // tv.setPadding(4, 20, 4, 20)
+                            // tv.background = borderDrawable(2)
 
                             tv.layoutParams = TableRow.LayoutParams(
                                 TableRow.LayoutParams.FILL_PARENT,
-                                TableRow.LayoutParams.WRAP_CONTENT)
+                                TableRow.LayoutParams.WRAP_CONTENT
+                            )
 
 
                             tableR.addView(tv)
@@ -141,9 +132,10 @@ class PlanningFragment : Fragment() {
 
                             cb.layoutParams = TableRow.LayoutParams(
                                 TableRow.LayoutParams.FILL_PARENT,
-                                TableRow.LayoutParams.WRAP_CONTENT)
+                                TableRow.LayoutParams.WRAP_CONTENT
+                            )
 
-                            cb.setBackgroundColor(ContextCompat.getColor(context!!,android.R.color.white))
+                            cb.setBackgroundColor(ContextCompat.getColor(context!!, android.R.color.white))
 
                             tableR.addView(cb)
                         }
@@ -154,32 +146,13 @@ class PlanningFragment : Fragment() {
 
                 tableR.layoutParams = TableRow.LayoutParams(
                     TableRow.LayoutParams.FILL_PARENT,
-                    TableRow.LayoutParams.WRAP_CONTENT)
+                    TableRow.LayoutParams.WRAP_CONTENT
+                )
 
 
                 table.addView(tableR)
             }
         }
-
-        //val container = container_planning
-        //container.addView(table)
-    }
-
-    private fun borderDrawable(borderWidth: Int): GradientDrawable {
-        val shapeDrawable = GradientDrawable()
-        shapeDrawable.setStroke(borderWidth, ContextCompat.getColor(context!!, R.color.colorAccent))
-        return shapeDrawable
-    }
-
-    private fun getName(i: Int): String {
-
-        if (i == 2) {
-            return "Recooooooooooooooord"
-        } else if (i == 3) {
-            return "Recooooooord"
-        }
-
-        return "Fran"
     }
 
     companion object {
