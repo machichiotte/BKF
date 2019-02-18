@@ -12,4 +12,5 @@
     <string name="control">Contrôle</string>
     <string name="documentation">Documentation</string>
     <string name="planning_choose_title">Choix atelier</string>
+    <string name="planning_failure_msg">modifier ce message d\'erreur planningframgnet</string>
 </resources>
