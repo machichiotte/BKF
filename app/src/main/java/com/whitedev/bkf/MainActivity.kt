@@ -8,10 +8,10 @@ import android.support.v7.app.ActionBarDrawerToggle
 import android.support.v7.app.AppCompatActivity
 import android.view.Menu
 import android.view.MenuItem
-import com.whitedev.bkf.fragment.ControlFragment
-import com.whitedev.bkf.fragment.DocumentationFragment
-import com.whitedev.bkf.fragment.PlanningFragment
-import com.whitedev.bkf.fragment.ProductionFragment
+import com.whitedev.bkf.ui.fragment.ControlFragment
+import com.whitedev.bkf.ui.fragment.DocumentationFragment
+import com.whitedev.bkf.ui.fragment.PlanningFragment
+import com.whitedev.bkf.ui.fragment.ProductionFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
 
@@ -39,6 +39,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
+
+        this.showFragment(FRAGMENT_PLANNING)
     }
 
     override fun onBackPressed() {
