@@ -13,4 +13,12 @@
     <string name="documentation">Documentation</string>
     <string name="planning_choose_title">Choix atelier</string>
     <string name="planning_failure_msg">modifier ce message d\'erreur planningframgnet</string>
+
+    <string-array name="planning_array">
+        <item>Rail</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 </resources>

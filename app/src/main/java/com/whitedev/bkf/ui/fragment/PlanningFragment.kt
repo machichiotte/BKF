@@ -6,10 +6,13 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import com.evrencoskun.tableview.TableView
 import com.whitedev.bkf.Constants
 import com.whitedev.bkf.R
+import com.whitedev.bkf.SpinnerItemSelectedListener
 import com.whitedev.bkf.Utils
 import com.whitedev.bkf.data.network.RestApi
 import com.whitedev.bkf.data.network.pojo.TableList
@@ -26,7 +29,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 class PlanningFragment : Fragment() {
-
 
     lateinit var tableView: TableView
 
@@ -52,6 +54,25 @@ class PlanningFragment : Fragment() {
                 tableView.adapter.removeRow(i)
             getListColumnAtelier()
         }
+
+        handleSpinner()
+    }
+
+    private fun handleSpinner() {
+        val spinner: Spinner = planning_spinner
+// Create an ArrayAdapter using the string array and a default spinner layout
+        ArrayAdapter.createFromResource(
+            activity,
+            R.array.planning_array,
+            android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            // Specify the layout to use when the list of choices appears
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            // Apply the adapter to the spinner
+            spinner.adapter = adapter
+        }
+
+        spinner.onItemSelectedListener = SpinnerItemSelectedListener()
     }
 
     private lateinit var token: String
