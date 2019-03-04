@@ -1,9 +1,10 @@
 package com.whitedev.bkf.data.network
 
+import com.whitedev.bkf.model.ServiceResponse
+import com.whitedev.bkf.modelbis.ServiceResponseBis
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
-import com.whitedev.bkf.model.ServiceResponse
 import io.reactivex.Observable
 
 interface RestApi {
@@ -20,6 +21,9 @@ interface RestApi {
 
     @GET("getListColumnAtelier/{token}")
     fun getListColumnAtelier(@Path("token", encoded = true) token: String): Call<ServiceResponse>
+
+    @GET("getListDataAtelier/{token}")
+    fun getListColumnAtelierBis(@Path("token", encoded = true) token: String): Call<ServiceResponseBis>
 
     @GET("getListColumnAtelier/{token}")
     fun getListColumnAtelierObs(@Path("token", encoded = true) token: String): Observable<ServiceResponse>

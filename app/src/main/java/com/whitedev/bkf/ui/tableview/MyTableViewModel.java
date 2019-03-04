@@ -17,6 +17,8 @@ public class MyTableViewModel {
     // View Types
     public static final int GENDER_TYPE = 1;
     public static final int MONEY_TYPE = 2;
+    public static final int CHECKBOX_TYPE = 3;
+
 
     private List<ColumnHeaderModel> mColumnHeaderModelList;
     private List<RowHeaderModel> mRowHeaderModelList;
@@ -26,12 +28,20 @@ public class MyTableViewModel {
     public int getCellItemViewType(int column) {
 
         switch (column) {
+            case 4:
             case 5:
-                // 5. column header is gender.
-                return GENDER_TYPE;
+            case 6:
+            case 7:
             case 8:
-                // 8. column header is Salary.
-                return MONEY_TYPE;
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+            case 15:
+                // 5. column header is gender.
+                return CHECKBOX_TYPE;
             default:
                 return 0;
         }

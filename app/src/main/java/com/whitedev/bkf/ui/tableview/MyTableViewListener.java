@@ -10,7 +10,7 @@ public class MyTableViewListener implements ITableViewListener {
      * Called when user click any cell item.
      *
      * @param cellView  : Clicked Cell ViewHolder.
-     * @param columnPosition : X (Column) position of Clicked Cell item.
+     * @param columnPosition : XBis (Column) position of Clicked Cell item.
      * @param rowPosition : Y (Row) position of Clicked Cell item.
      */
     @Override
@@ -23,7 +23,7 @@ public class MyTableViewListener implements ITableViewListener {
      * Called when user long press any cell item.
      *
      * @param cellView : Long Pressed Cell ViewHolder.
-     * @param column   : X (Column) position of Long Pressed Cell item.
+     * @param column   : XBis (Column) position of Long Pressed Cell item.
      * @param row      : Y (Row) position of Long Pressed Cell item.
      */
     @Override
@@ -35,7 +35,7 @@ public class MyTableViewListener implements ITableViewListener {
      * Called when user click any column header item.
      *
      * @param columnHeaderView : Clicked Column Header ViewHolder.
-     * @param columnPosition        : X (Column) position of Clicked Column Header item.
+     * @param columnPosition        : XBis (Column) position of Clicked Column Header item.
      */
     @Override
     public void onColumnHeaderClicked(@NonNull RecyclerView.ViewHolder columnHeaderView, int
@@ -47,7 +47,7 @@ public class MyTableViewListener implements ITableViewListener {
      * Called when user click any column header item.
      *
      * @param columnHeaderView : Long pressed Column Header ViewHolder.
-     * @param columnPosition        : X (Column) position of Clicked Column Header item.
+     * @param columnPosition        : XBis (Column) position of Clicked Column Header item.
      * @version 0.8.5.1
      */
     @Override

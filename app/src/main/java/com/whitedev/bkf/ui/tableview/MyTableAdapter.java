@@ -8,7 +8,6 @@ import com.evrencoskun.tableview.adapter.AbstractTableAdapter;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractSorterViewHolder;
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
 import com.whitedev.bkf.R;
-import com.whitedev.bkf.data.network.pojo.TableList;
 import com.whitedev.bkf.ui.tableview.holder.CellViewHolder;
 import com.whitedev.bkf.ui.tableview.holder.ColumnHeaderViewHolder;
 import com.whitedev.bkf.ui.tableview.holder.GenderCellViewHolder;
@@ -16,8 +15,6 @@ import com.whitedev.bkf.ui.tableview.holder.RowHeaderViewHolder;
 import com.whitedev.bkf.ui.tableview.model.CellModel;
 import com.whitedev.bkf.ui.tableview.model.ColumnHeaderModel;
 import com.whitedev.bkf.ui.tableview.model.RowHeaderModel;
-
-import java.util.List;
 
 public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowHeaderModel,
         CellModel> {
@@ -36,6 +33,12 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
         View layout;
 
         switch (viewType) {
+            case MyTableViewModel.CHECKBOX_TYPE:
+                // Get gender cell xml Layout
+                layout = LayoutInflater.from(mContext).inflate(R.layout
+                        .table_view_checkbox_cell_layout, parent, false);
+
+                return new GenderCellViewHolder(layout);
             case MyTableViewModel.GENDER_TYPE:
                 // Get gender cell xml Layout
                 layout = LayoutInflater.from(mContext).inflate(R.layout
@@ -128,19 +131,4 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
     public int getCellItemViewType(int position) {
         return myTableViewModel.getCellItemViewType(position);
     }
-
-
-    /**
-     * This method is not a generic Adapter method. It helps to generate lists from single user
-     * list for this adapter.
-     */
-    public void setTableList(List<TableList> tableList) {
-        // Generate the lists that are used to TableViewAdapter
-        myTableViewModel.generateListForTableView(tableList);
-
-        // Now we got what we need to show on TableView.
-        setAllItems(myTableViewModel.getColumHeaderModeList(), myTableViewModel
-                .getRowHeaderModelList(), myTableViewModel.getCellModelList());
-    }
-
 }

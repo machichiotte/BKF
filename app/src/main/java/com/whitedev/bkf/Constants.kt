@@ -21,9 +21,10 @@ class Constants {
 
         const val USER_BASE_URL = "USER_BASE_URL"
 
-        const val TIME_NOW = "TIME_NOW"
-        const val TIME_MORE_ONE = "TIME_MORE_ONE"
-        const val TIME_MORE_TWO = "TIME_MORE_TWO"
-        const val TIME_PREVIOUS = "TIME_PREVIOUS"
+
+        const val WEEK_0 = 0
+        const val WEEK_1 = 1
+        const val WEEK_2 = 2
+        const val WEEK_3 = 3
     }
 }

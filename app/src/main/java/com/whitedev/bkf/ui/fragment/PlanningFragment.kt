@@ -1,22 +1,25 @@
 package com.whitedev.bkf.ui.fragment
 
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.Toast
 import com.evrencoskun.tableview.TableView
-import com.whitedev.bkf.Constants
-import com.whitedev.bkf.R
-import com.whitedev.bkf.SpinnerItemSelectedListener
-import com.whitedev.bkf.Utils
+import com.google.gson.Gson
+import com.whitedev.bkf.*
+import com.whitedev.bkf.Constants.Companion.WEEK_0
+import com.whitedev.bkf.Constants.Companion.WEEK_1
+import com.whitedev.bkf.Constants.Companion.WEEK_2
+import com.whitedev.bkf.Constants.Companion.WEEK_3
 import com.whitedev.bkf.data.network.RestApi
-import com.whitedev.bkf.data.network.pojo.TableList
-import com.whitedev.bkf.model.ServiceResponse
+import com.whitedev.bkf.modelbis.ServiceResponseBis
+import com.whitedev.bkf.modelbis.XBis
 import com.whitedev.bkf.ui.tableview.MyTableAdapter
 import com.whitedev.bkf.ui.tableview.model.CellModel
 import com.whitedev.bkf.ui.tableview.model.ColumnHeaderModel
@@ -27,10 +30,17 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
+import java.nio.charset.Charset
+
 
 class PlanningFragment : Fragment() {
 
     lateinit var tableView: TableView
+    var statusSwipe: Int = 1
+    private var previousSize = 0
+    private var maxWeek = 1
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_planning, container, false)
@@ -38,24 +48,94 @@ class PlanningFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        getListColumnAtelier()
 
         tableView = table_view
 
-        iv_back.setOnClickListener {
 
-            for (i in 6 downTo 0)
-                tableView.adapter.removeRow(i)
-            getListColumnAtelier()
+        statusSwipe = WEEK_0
+        getListColumnAtelier(0)
+       // loadHardcodedMenu(0)
+
+        ll_table_view.setOnTouchListener(object : OnSwipeTouchListener(this.activity) {
+
+            override fun onSwipeLeft() {
+                super.onSwipeLeft()
+
+                backAction()
+            }
+
+            override fun onSwipeRight() {
+                super.onSwipeRight()
+                nextAction()
+
+            }
+        })
+
+        iv_back.setOnClickListener {
+            nextAction()
         }
 
         iv_next.setOnClickListener {
-            for (i in 6 downTo 0)
-                tableView.adapter.removeRow(i)
-            getListColumnAtelier()
+            backAction()
         }
 
         handleSpinner()
+    }
+
+    private fun prepareSwipe() {
+        when (statusSwipe) {
+            WEEK_1 -> {
+                iv_back.visibility = View.VISIBLE
+
+                if (maxWeek<3)
+                    iv_next.visibility = View.GONE
+                else
+                    iv_next.visibility = View.VISIBLE
+
+            }
+
+            WEEK_0 -> {
+                iv_back.visibility = View.GONE
+
+                if (maxWeek<2)
+                    iv_next.visibility = View.GONE
+                else
+                    iv_next.visibility = View.VISIBLE
+            }
+
+            WEEK_2 -> {
+                iv_next.visibility = View.VISIBLE
+                if (maxWeek<4)
+                    iv_next.visibility = View.GONE
+            }
+            WEEK_3 -> {
+                iv_next.visibility = View.GONE
+            }
+        }
+    }
+
+    private fun backAction() {
+        if (statusSwipe != WEEK_3) {
+            statusSwipe++
+            prepareSwipe()
+
+            for (i in previousSize - 1 downTo 0)
+                tableView.adapter.removeRow(i)
+           // loadHardcodedMenu(statusSwipe)
+            getListColumnAtelier(statusSwipe)
+        }
+    }
+
+    private fun nextAction() {
+        if (statusSwipe != WEEK_0) {
+            statusSwipe--
+            prepareSwipe()
+
+            for (i in previousSize - 1 downTo 0)
+                tableView.adapter.removeRow(i)
+           // loadHardcodedMenu(statusSwipe)
+            getListColumnAtelier(statusSwipe)
+        }
     }
 
     private fun handleSpinner() {
@@ -76,9 +156,29 @@ class PlanningFragment : Fragment() {
     }
 
     private lateinit var token: String
-    lateinit var listColumn: List<TableList>
 
-    private fun getListColumnAtelier() {
+    private fun loadHardcodedMenu(position: Int) {
+        var json: String?
+        try {
+            val inputS = activity?.assets?.open("data.json")
+            inputS?.let {
+                val size = it.available()
+                val buffer = ByteArray(size)
+                it.read(buffer)
+                it.close()
+                json = String(buffer, Charset.forName("UTF-8"))
+
+                val response = Gson().fromJson(json, ServiceResponseBis::class.java)
+                prepareTableViewForPosition(response.list, position)
+            }
+
+        } catch (ex: IOException) {
+            ex.printStackTrace()
+        }
+
+    }
+
+    private fun getListColumnAtelier(position: Int) {
 
         token = "FQFD5165DQSVCD1QSV651DSFV65FD" //fixme delete this mock
 
@@ -89,36 +189,28 @@ class PlanningFragment : Fragment() {
                 .build()
             val service = retrofit.create(RestApi::class.java)
 
-            val call: Call<ServiceResponse> = service.getListColumnAtelier(tok)
+            val call: Call<ServiceResponseBis> = service.getListColumnAtelierBis(tok)
 
-            call.enqueue(object : Callback<ServiceResponse> {
-                override fun onResponse(call: Call<ServiceResponse>, response: Response<ServiceResponse>) {
+            call.enqueue(object : Callback<ServiceResponseBis> {
+                override fun onResponse(call: Call<ServiceResponseBis>, response: Response<ServiceResponseBis>) {
                     Handler().postDelayed({
                         response.body()?.let { body ->
                             if (body.status == Constants.SUCCESS) {
-                                body.list?.let {
-                                    listColumn = it
-                                    addDynamicTableTest(listColumn)
-                                }
+                                prepareTableViewForPosition(body.list, position)
                             }
                         }
                     }, 1500)
                 }
 
-                override fun onFailure(call: Call<ServiceResponse>, t: Throwable) {
-                    Toast.makeText(
-                        context,
-                        getString(R.string.planning_failure_msg),
-                        Toast.LENGTH_SHORT
-                    )
-                        .show()
+                override fun onFailure(call: Call<ServiceResponseBis>, t: Throwable) {
+                    Log.e("test", "failure")
                 }
             })
 
         }
     }
 
-    private fun addDynamicTableTest(listColumn: List<TableList>) {
+    private fun prepareTableViewForPosition(list: List<XBis>, position: Int) {
 
         val adapter = MyTableAdapter(context)
         tableView.adapter = adapter
@@ -126,47 +218,43 @@ class PlanningFragment : Fragment() {
         val mRowHeaderList: MutableList<RowHeaderModel> = mutableListOf()
         val mColumnHeaderList: MutableList<ColumnHeaderModel> = mutableListOf()
         val mCellList: MutableList<MutableList<CellModel>> = mutableListOf()
+        if (list.size >= position) {
+            maxWeek = list.size
+            prepareSwipe()
 
-        val mCList: MutableList<CellModel> = mutableListOf()
-        val mCList2: MutableList<CellModel> = mutableListOf()
-        val mCList3: MutableList<CellModel> = mutableListOf()
-        val mCList4: MutableList<CellModel> = mutableListOf()
-        val mCList5: MutableList<CellModel> = mutableListOf()
-        val mCList6: MutableList<CellModel> = mutableListOf()
-        val mCList7: MutableList<CellModel> = mutableListOf()
+            tv_week.text = "Semaine " + list[position].week
 
+            var colorString = list[position].color
+            if (!colorString.contains("#")) {
+                colorString = "#$colorString"
+            }
 
-        for (list in listColumn) {
-            mColumnHeaderList.add(ColumnHeaderModel(list.name))
+            tv_week.setTextColor(Color.parseColor(colorString))
+
+            //prepare only column
+            val dataCellList = list[position].data[0].datacell
+            for (data in dataCellList) {
+                mColumnHeaderList.add(ColumnHeaderModel(data.name))
+            }
+
+            previousSize = list[position].data.size
+            for (i in 0 until previousSize) {
+                mRowHeaderList.add(RowHeaderModel("nada"))
+                val mCList: MutableList<CellModel> = mutableListOf()
+
+                for (j in 0 until dataCellList.size) {
+                    mCList.add(CellModel("id:pos:" + position + "pos2:" + j, list[position].data[i].datacell[j].data))
+                }
+
+                mCellList.add(mCList)
+            }
         }
-
-
-        for (i in 0..listColumn.size) {
-            mRowHeaderList.add(RowHeaderModel(""))
-            mCList.add(CellModel("cell"))
-            mCList2.add(CellModel("cell"))
-            mCList3.add(CellModel("cell"))
-            mCList4.add(CellModel("cell"))
-            mCList5.add(CellModel("cell"))
-            mCList6.add(CellModel("cell"))
-            mCList7.add(CellModel("cell"))
-        }
-
-
-        mCellList.add(mCList)
-        mCellList.add(mCList2)
-        mCellList.add(mCList3)
-        mCellList.add(mCList4)
-        mCellList.add(mCList5)
-        mCellList.add(mCList6)
-        mCellList.add(mCList7)
 
         tableView.rowHeaderWidth = 0
         adapter.setAllItems(mColumnHeaderList, mRowHeaderList, mCellList)
     }
 
     companion object {
-
         fun newInstance(): PlanningFragment {
             return PlanningFragment()
         }
