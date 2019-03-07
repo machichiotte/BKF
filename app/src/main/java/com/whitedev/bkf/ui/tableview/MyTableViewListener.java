@@ -2,6 +2,7 @@ package com.whitedev.bkf.ui.tableview;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import com.evrencoskun.tableview.listener.ITableViewListener;
 
 public class MyTableViewListener implements ITableViewListener {
@@ -17,6 +18,8 @@ public class MyTableViewListener implements ITableViewListener {
     public void onCellClicked(@NonNull RecyclerView.ViewHolder cellView, int columnPosition, int
             rowPosition) {
         // Do what you want.
+
+        Log.e("cell0","click");
     }
 
     /**

@@ -2,16 +2,20 @@
 <FrameLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/table_view_cell_height"
-        android:background="@color/unselected_background_color">
-
-    <CheckBox
-            android:id="@+id/cell_cb"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:background="@android:color/transparent"
-            android:gravity="center"
-            android:scaleType="fitXY"/>
-
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:focusable="false"
+        android:descendantFocusability="blocksDescendants"
+        android:layout_gravity="center"
+        android:background="@android:color/white">
+        <CheckBox
+                android:id="@+id/cell_cb"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                android:layout_gravity="center"
+                android:background="@android:color/white"
+                android:gravity="center"
+                android:scaleType="fitXY"/>
 </FrameLayout>

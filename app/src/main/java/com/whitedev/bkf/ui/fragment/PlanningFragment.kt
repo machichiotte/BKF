@@ -18,9 +18,10 @@ import com.whitedev.bkf.Constants.Companion.WEEK_1
 import com.whitedev.bkf.Constants.Companion.WEEK_2
 import com.whitedev.bkf.Constants.Companion.WEEK_3
 import com.whitedev.bkf.data.network.RestApi
-import com.whitedev.bkf.modelbis.ServiceResponseBis
-import com.whitedev.bkf.modelbis.XBis
+import com.whitedev.bkf.model.ServiceResponse
+import com.whitedev.bkf.model.X
 import com.whitedev.bkf.ui.tableview.MyTableAdapter
+import com.whitedev.bkf.ui.tableview.MyTableViewListener
 import com.whitedev.bkf.ui.tableview.model.CellModel
 import com.whitedev.bkf.ui.tableview.model.ColumnHeaderModel
 import com.whitedev.bkf.ui.tableview.model.RowHeaderModel
@@ -32,7 +33,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.nio.charset.Charset
-
 
 class PlanningFragment : Fragment() {
 
@@ -50,11 +50,9 @@ class PlanningFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         tableView = table_view
-
-
         statusSwipe = WEEK_0
-        getListColumnAtelier(0)
-       // loadHardcodedMenu(0)
+
+        getList(0)
 
         ll_table_view.setOnTouchListener(object : OnSwipeTouchListener(this.activity) {
 
@@ -87,17 +85,16 @@ class PlanningFragment : Fragment() {
             WEEK_1 -> {
                 iv_back.visibility = View.VISIBLE
 
-                if (maxWeek<3)
+                if (maxWeek < 3)
                     iv_next.visibility = View.GONE
                 else
                     iv_next.visibility = View.VISIBLE
-
             }
 
             WEEK_0 -> {
                 iv_back.visibility = View.GONE
 
-                if (maxWeek<2)
+                if (maxWeek < 2)
                     iv_next.visibility = View.GONE
                 else
                     iv_next.visibility = View.VISIBLE
@@ -105,7 +102,7 @@ class PlanningFragment : Fragment() {
 
             WEEK_2 -> {
                 iv_next.visibility = View.VISIBLE
-                if (maxWeek<4)
+                if (maxWeek < 4)
                     iv_next.visibility = View.GONE
             }
             WEEK_3 -> {
@@ -121,8 +118,8 @@ class PlanningFragment : Fragment() {
 
             for (i in previousSize - 1 downTo 0)
                 tableView.adapter.removeRow(i)
-           // loadHardcodedMenu(statusSwipe)
-            getListColumnAtelier(statusSwipe)
+            previousSize = 0
+            getList(statusSwipe)
         }
     }
 
@@ -133,14 +130,14 @@ class PlanningFragment : Fragment() {
 
             for (i in previousSize - 1 downTo 0)
                 tableView.adapter.removeRow(i)
-           // loadHardcodedMenu(statusSwipe)
-            getListColumnAtelier(statusSwipe)
+            previousSize = 0
+            getList(statusSwipe)
         }
     }
 
     private fun handleSpinner() {
         val spinner: Spinner = planning_spinner
-// Create an ArrayAdapter using the string array and a default spinner layout
+        // Create an ArrayAdapter using the string array and a default spinner layout
         ArrayAdapter.createFromResource(
             activity,
             R.array.planning_array,
@@ -168,7 +165,7 @@ class PlanningFragment : Fragment() {
                 it.close()
                 json = String(buffer, Charset.forName("UTF-8"))
 
-                val response = Gson().fromJson(json, ServiceResponseBis::class.java)
+                val response = Gson().fromJson(json, ServiceResponse::class.java)
                 prepareTableViewForPosition(response.list, position)
             }
 
@@ -178,8 +175,13 @@ class PlanningFragment : Fragment() {
 
     }
 
-    private fun getListColumnAtelier(position: Int) {
+    private fun getList(position: Int) {
 
+        loadHardcodedMenu(position)
+        //getListColumnAtelier(position)
+    }
+
+    private fun getListColumnAtelier(position: Int) {
         token = "FQFD5165DQSVCD1QSV651DSFV65FD" //fixme delete this mock
 
         token.let { tok ->
@@ -189,10 +191,10 @@ class PlanningFragment : Fragment() {
                 .build()
             val service = retrofit.create(RestApi::class.java)
 
-            val call: Call<ServiceResponseBis> = service.getListColumnAtelierBis(tok)
+            val call: Call<ServiceResponse> = service.getListColumnAtelier(tok)
 
-            call.enqueue(object : Callback<ServiceResponseBis> {
-                override fun onResponse(call: Call<ServiceResponseBis>, response: Response<ServiceResponseBis>) {
+            call.enqueue(object : Callback<ServiceResponse> {
+                override fun onResponse(call: Call<ServiceResponse>, response: Response<ServiceResponse>) {
                     Handler().postDelayed({
                         response.body()?.let { body ->
                             if (body.status == Constants.SUCCESS) {
@@ -202,7 +204,7 @@ class PlanningFragment : Fragment() {
                     }, 1500)
                 }
 
-                override fun onFailure(call: Call<ServiceResponseBis>, t: Throwable) {
+                override fun onFailure(call: Call<ServiceResponse>, t: Throwable) {
                     Log.e("test", "failure")
                 }
             })
@@ -210,7 +212,7 @@ class PlanningFragment : Fragment() {
         }
     }
 
-    private fun prepareTableViewForPosition(list: List<XBis>, position: Int) {
+    private fun prepareTableViewForPosition(list: List<X>, position: Int) {
 
         val adapter = MyTableAdapter(context)
         tableView.adapter = adapter
@@ -251,6 +253,11 @@ class PlanningFragment : Fragment() {
         }
 
         tableView.rowHeaderWidth = 0
+        tableView.tableViewListener = MyTableViewListener()
+        //tableView.isIgnoreSelectionColors = true
+        tableView.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
+        tableView.isFocusableInTouchMode = false
+
         adapter.setAllItems(mColumnHeaderList, mRowHeaderList, mCellList)
     }
 

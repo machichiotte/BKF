@@ -10,7 +10,7 @@
 
 
 
-    <dimen name="cell_height">40dp</dimen>
+    <dimen name="cell_height">60dp</dimen>
     <dimen name="row_header_width">55dp</dimen>
     <dimen name="text_size">12sp</dimen>
 
@@ -25,6 +25,7 @@
     <dimen name="default_row_header_width">55dp</dimen>
     <dimen name="default_column_header_height">40dp</dimen>
     <dimen name="table_view_cell_height">28dp</dimen>
+    <dimen name="table_view_cell_height_small">20dp</dimen>
     <dimen name="table_view_row_header_width">28dp</dimen>
     <dimen name="table_view_default_text_size">11sp</dimen>
 </resources>

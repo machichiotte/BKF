@@ -9,8 +9,8 @@ import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractSorterViewH
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder;
 import com.whitedev.bkf.R;
 import com.whitedev.bkf.ui.tableview.holder.CellViewHolder;
+import com.whitedev.bkf.ui.tableview.holder.CheckboxCellViewHolder;
 import com.whitedev.bkf.ui.tableview.holder.ColumnHeaderViewHolder;
-import com.whitedev.bkf.ui.tableview.holder.GenderCellViewHolder;
 import com.whitedev.bkf.ui.tableview.holder.RowHeaderViewHolder;
 import com.whitedev.bkf.ui.tableview.model.CellModel;
 import com.whitedev.bkf.ui.tableview.model.ColumnHeaderModel;
@@ -23,10 +23,8 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
 
     public MyTableAdapter(Context p_jContext) {
         super(p_jContext);
-
         this.myTableViewModel = new MyTableViewModel();
     }
-
 
     @Override
     public AbstractViewHolder onCreateCellViewHolder(ViewGroup parent, int viewType) {
@@ -38,13 +36,11 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
                 layout = LayoutInflater.from(mContext).inflate(R.layout
                         .table_view_checkbox_cell_layout, parent, false);
 
-                return new GenderCellViewHolder(layout);
-            case MyTableViewModel.GENDER_TYPE:
-                // Get gender cell xml Layout
-                layout = LayoutInflater.from(mContext).inflate(R.layout
-                        .table_view_gender_cell_layout, parent, false);
+                parent.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
+                parent.getRootView().setClickable(false);
+                parent.getRootView().setFocusableInTouchMode(false);
 
-                return new GenderCellViewHolder(layout);
+                return new CheckboxCellViewHolder(layout);
 
             default:
                 // Get default Cell xml Layout
@@ -61,14 +57,12 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
             p_nXPosition, int p_nYPosition) {
         CellModel cell = (CellModel) p_jValue;
 
-        if (holder instanceof CellViewHolder) {
+        if (holder instanceof CheckboxCellViewHolder) {
+            ((CheckboxCellViewHolder) holder).setCellModel(cell);
+        } else if (holder instanceof CellViewHolder) {
             // Get the holder to update cell item text
-            ((CellViewHolder) holder).setCellModel(cell, p_nXPosition);
-
-        } else if (holder instanceof GenderCellViewHolder) {
-            ((GenderCellViewHolder) holder).setCellModel(cell);
+            ((CellViewHolder) holder).setCellModel(cell);
         }
-
     }
 
     @Override
@@ -86,7 +80,6 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
 
         // Get the holder to update cell item text
         ColumnHeaderViewHolder columnHeaderViewHolder = (ColumnHeaderViewHolder) holder;
-
         columnHeaderViewHolder.setColumnHeaderModel(columnHeader, p_nXPosition);
     }
 
@@ -109,7 +102,6 @@ public class MyTableAdapter extends AbstractTableAdapter<ColumnHeaderModel, RowH
 
         RowHeaderViewHolder rowHeaderViewHolder = (RowHeaderViewHolder) holder;
         rowHeaderViewHolder.row_header_textview.setText(rowHeaderModel.getId());
-
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.whitedev.bkf.ui.tableview.holder;
 
-import android.support.v4.content.ContextCompat;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -23,11 +22,9 @@ public class CellViewHolder extends AbstractViewHolder {
         cell_container = itemView.findViewById(R.id.cell_container);
     }
 
-    public void setCellModel(CellModel p_jModel, int pColumnPosition) {
+    public void setCellModel(CellModel p_jModel) {
 
-        // Change textView align by column
-        cell_textview.setGravity(ColumnHeaderViewHolder.COLUMN_TEXT_ALIGNS[pColumnPosition] |
-                Gravity.CENTER_VERTICAL);
+        cell_textview.setGravity(Gravity.START|Gravity.CENTER_VERTICAL);
 
         // Set text
         cell_textview.setText(String.valueOf(p_jModel.getData()));
@@ -39,14 +36,17 @@ public class CellViewHolder extends AbstractViewHolder {
 
     @Override
     public void setSelected(SelectionState p_nSelectionState) {
-        super.setSelected(p_nSelectionState);
+     /*   super.setSelected(p_nSelectionState);
 
         if (p_nSelectionState == SelectionState.SELECTED) {
+            Log.e("bli","selec");
             cell_textview.setTextColor(ContextCompat.getColor(cell_textview.getContext(), R.color
                     .selected_text_color));
         } else {
             cell_textview.setTextColor(ContextCompat.getColor(cell_textview.getContext(), R.color
                     .unselected_text_color));
-        }
+            Log.e("bli","nopselec");
+
+        }*/
     }
 }

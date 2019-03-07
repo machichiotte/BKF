@@ -4,7 +4,7 @@
                 android:id="@+id/root"
                 android:background="@color/cell_background_color"
                 android:layout_width="@dimen/table_view_row_header_width"
-                android:layout_height="@dimen/table_view_cell_height">
+                android:layout_height="@dimen/cell_height">
     <LinearLayout
             android:id="@+id/row_header_container"
             android:layout_width="match_parent"
