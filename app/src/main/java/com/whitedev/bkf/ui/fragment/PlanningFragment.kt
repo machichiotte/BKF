@@ -54,7 +54,7 @@ class PlanningFragment : Fragment() {
 
         getList(0)
 
-        ll_table_view.setOnTouchListener(object : OnSwipeTouchListener(this.activity) {
+        ll_table_view.setOnTouchListener(object : OnSwipeTouchListener(context) {
 
             override fun onSwipeLeft() {
                 super.onSwipeLeft()
