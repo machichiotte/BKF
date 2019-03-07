@@ -58,14 +58,12 @@ class PlanningFragment : Fragment() {
 
             override fun onSwipeLeft() {
                 super.onSwipeLeft()
-
                 backAction()
             }
 
             override fun onSwipeRight() {
                 super.onSwipeRight()
                 nextAction()
-
             }
         })
 

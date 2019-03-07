@@ -1,11 +1,10 @@
-package com.whitedev.bkf.ui.tableview;
+package com.whitedev.bkf.ui.tableview
 
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import com.evrencoskun.tableview.listener.ITableViewListener;
+import android.support.v7.widget.RecyclerView
+import android.util.Log
+import com.evrencoskun.tableview.listener.ITableViewListener
 
-public class MyTableViewListener implements ITableViewListener {
+class MyTableViewListener : ITableViewListener {
 
     /**
      * Called when user click any cell item.
@@ -14,12 +13,10 @@ public class MyTableViewListener implements ITableViewListener {
      * @param columnPosition : XBis (Column) position of Clicked Cell item.
      * @param rowPosition : Y (Row) position of Clicked Cell item.
      */
-    @Override
-    public void onCellClicked(@NonNull RecyclerView.ViewHolder cellView, int columnPosition, int
-            rowPosition) {
+    override fun onCellClicked(cellView: RecyclerView.ViewHolder, columnPosition: Int, rowPosition: Int) {
         // Do what you want.
 
-        Log.e("cell0","click");
+        Log.e("cell0", "click")
     }
 
     /**
@@ -29,8 +26,7 @@ public class MyTableViewListener implements ITableViewListener {
      * @param column   : XBis (Column) position of Long Pressed Cell item.
      * @param row      : Y (Row) position of Long Pressed Cell item.
      */
-    @Override
-    public void onCellLongPressed(@NonNull RecyclerView.ViewHolder cellView, int column, int row) {
+    override fun onCellLongPressed(cellView: RecyclerView.ViewHolder, column: Int, row: Int) {
         // Do What you want
     }
 
@@ -40,9 +36,7 @@ public class MyTableViewListener implements ITableViewListener {
      * @param columnHeaderView : Clicked Column Header ViewHolder.
      * @param columnPosition        : XBis (Column) position of Clicked Column Header item.
      */
-    @Override
-    public void onColumnHeaderClicked(@NonNull RecyclerView.ViewHolder columnHeaderView, int
-            columnPosition) {
+    override fun onColumnHeaderClicked(columnHeaderView: RecyclerView.ViewHolder, columnPosition: Int) {
         // Do what you want.
     }
 
@@ -53,9 +47,7 @@ public class MyTableViewListener implements ITableViewListener {
      * @param columnPosition        : XBis (Column) position of Clicked Column Header item.
      * @version 0.8.5.1
      */
-    @Override
-    public void onColumnHeaderLongPressed(@NonNull RecyclerView.ViewHolder columnHeaderView, int
-            columnPosition) {
+    override fun onColumnHeaderLongPressed(columnHeaderView: RecyclerView.ViewHolder, columnPosition: Int) {
         // Do what you want.
     }
 
@@ -65,9 +57,7 @@ public class MyTableViewListener implements ITableViewListener {
      * @param rowHeaderView : Clicked Row Header ViewHolder.
      * @param rowPosition     : Y (Row) position of Clicked Row Header item.
      */
-    @Override
-    public void onRowHeaderClicked(@NonNull RecyclerView.ViewHolder rowHeaderView, int
-            rowPosition) {
+    override fun onRowHeaderClicked(rowHeaderView: RecyclerView.ViewHolder, rowPosition: Int) {
         // Do what you want.
 
     }
@@ -79,9 +69,7 @@ public class MyTableViewListener implements ITableViewListener {
      * @param rowPosition     : Y (Row) position of Clicked Row Header item.
      * @version 0.8.5.1
      */
-    @Override
-    public void onRowHeaderLongPressed(@NonNull RecyclerView.ViewHolder rowHeaderView, int
-            rowPosition) {
+    override fun onRowHeaderLongPressed(rowHeaderView: RecyclerView.ViewHolder, rowPosition: Int) {
         // Do what you want.
 
     }
