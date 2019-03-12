@@ -38,16 +38,20 @@
             android:layout_gravity="center"
             android:text="@string/update"
             android:enabled="false"
-            android:background="@color/colorPrimary"
+            android:background="@color/shadow_background_color"
+            android:layout_margin="8dp"
             android:padding="8dp"/>
 
     <!-- <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content"> </ScrollView>-->
     <LinearLayout
             android:id="@+id/ll_prod_table_view"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
             android:orientation="vertical"
             android:layout_height="wrap_content">
         <com.evrencoskun.tableview.TableView
+                android:layout_gravity="center"
                 android:layout_marginTop="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="32dp"

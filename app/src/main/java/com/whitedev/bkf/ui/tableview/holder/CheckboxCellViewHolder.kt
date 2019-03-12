@@ -21,7 +21,8 @@ class CheckboxCellViewHolder(itemView: View) : AbstractViewHolder(itemView) {
         val isChecked = p_jModel.data.toString()
 
         if (p_jModel.data == null) {
-            cell_checkbox.visibility = View.GONE
+            cell_checkbox.visibility = View.INVISIBLE
+            cell_checkbox.isClickable = false
         } else {
             cell_checkbox.isChecked = java.lang.Boolean.valueOf(isChecked)
             cell_checkbox.setOnCheckedChangeListener { _, isCkd ->

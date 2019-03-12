@@ -52,6 +52,9 @@ class DocumentationFragment : Fragment() {
                 progressBar!!.visibility = View.GONE
             }
         }
+
+
+        //TODO appel api au lancement de l'app
         mywebview!!.loadUrl("http://www.whitedev.fr/")
     }
 }
