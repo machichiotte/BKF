@@ -14,9 +14,7 @@ import com.whitedev.bkf.R
 class DocumentationFragment : Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val rootView = inflater.inflate(R.layout.fragment_documentation, container, false)
-
-        return rootView
+        return inflater.inflate(R.layout.fragment_documentation, container, false)
     }
 
     companion object {
