@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">bkf</string>
+    <string name="app_name">BKF</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="nav_header_title">Android Studio</string>
@@ -13,6 +13,7 @@
     <string name="documentation">Documentation</string>
     <string name="planning_choose_title">Choix atelier</string>
     <string name="planning_failure_msg">modifier ce message d\'erreur planningframgnet</string>
+    <string name="update">Mettre à jour</string>
 
     <string-array name="planning_array">
         <item>Rail</item>

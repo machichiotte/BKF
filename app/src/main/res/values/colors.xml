@@ -9,9 +9,9 @@
     <color name="header_line_color">@android:color/holo_red_light</color>
 
     <color name="selected_background_color">#15a4fa</color>
-    <color name="unselected_background_color">#1c324a</color>
-    <color name="shadow_background_color">#28415f</color>
-    <color name="unselected_header_background_color">#1f3650</color>
+    <color name="unselected_background_color">#00ff00</color>
+    <color name="shadow_background_color">#AAAAAA</color>
+    <color name="unselected_header_background_color">#AAAAAA</color>
 
     <color name="unselected_text_color">#537095</color>
     <color name="selected_text_color">#ffffff</color>

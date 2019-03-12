@@ -6,7 +6,7 @@ import android.widget.Toast
 
 class SpinnerItemSelectedListener : AdapterView.OnItemSelectedListener {
 
-    override fun onItemSelected(parent: AdapterView<*>, view: View, pos: Int, id: Long) {
+    override fun onItemSelected(parent: AdapterView<*>, view: View?, pos: Int, id: Long) {
         Toast.makeText(
             parent.context,
             "OnItemSelectedListener : " + parent.getItemAtPosition(pos).toString(),

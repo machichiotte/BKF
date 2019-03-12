@@ -4,5 +4,5 @@ class ColumnHeaderModel : CellModel {
 
     constructor(id: String) : super(id) {}
 
-    constructor(id: String, data: String) : super(id, data) {}
+    constructor(id: String, data: String?) : super(id, data) {}
 }

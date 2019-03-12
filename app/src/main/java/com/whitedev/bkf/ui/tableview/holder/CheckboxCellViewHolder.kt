@@ -4,8 +4,10 @@ import android.view.View
 import android.widget.CheckBox
 import android.widget.Toast
 import com.evrencoskun.tableview.adapter.recyclerview.holder.AbstractViewHolder
+import com.whitedev.bkf.CheckBoxSelectionEvent
 import com.whitedev.bkf.R
 import com.whitedev.bkf.ui.tableview.model.CellModel
+import org.greenrobot.eventbus.EventBus
 
 class CheckboxCellViewHolder(itemView: View) : AbstractViewHolder(itemView) {
 
@@ -18,10 +20,13 @@ class CheckboxCellViewHolder(itemView: View) : AbstractViewHolder(itemView) {
     fun setCellModel(p_jModel: CellModel) {
         val isChecked = p_jModel.data.toString()
 
-        cell_checkbox.isChecked = java.lang.Boolean.valueOf(isChecked)
-        cell_checkbox.setOnCheckedChangeListener { buttonView, isCkd ->
-            //TODO balancer l'event pour modifier le json
-            // Toast.makeText(itemView.getContext(), "ischeeck::" + isCkd, Toast.LENGTH_SHORT).show();
+        if (p_jModel.data == null) {
+            cell_checkbox.visibility = View.GONE
+        } else {
+            cell_checkbox.isChecked = java.lang.Boolean.valueOf(isChecked)
+            cell_checkbox.setOnCheckedChangeListener { _, isCkd ->
+                EventBus.getDefault().post(CheckBoxSelectionEvent(p_jModel.data.toString(), p_jModel.getColumn(), isCkd))
+            }
         }
     }
 

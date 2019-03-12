@@ -27,17 +27,24 @@ import com.evrencoskun.tableview.sort.ISortableModel
 open class CellModel : ISortableModel, IFilterableModel {
 
     private var mId: String? = null
+    private var mColumn: String? = null
     var data: Any? = null
         private set
     var filterKeyword: String? = null
 
-    constructor(id: String) {
+    constructor(id: String?) {
         this.mId = id
     }
 
-    constructor(id: String, data: Any) {
+    constructor(id: String?, data: Any?) {
         this.mId = id
         this.data = data
+        this.filterKeyword = data.toString()
+    }
+    constructor(id: String?, data: Any?, column:String?) {
+        this.mId = id
+        this.data = data
+        this.mColumn = column
         this.filterKeyword = data.toString()
     }
 
@@ -47,6 +54,10 @@ open class CellModel : ISortableModel, IFilterableModel {
      */
     override fun getId(): String? {
         return mId
+    }
+
+    fun getColumn(): String? {
+        return mColumn
     }
 
     /**

@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.Toast
 import com.evrencoskun.tableview.TableView
 import com.google.gson.Gson
 import com.whitedev.bkf.*
@@ -18,6 +19,7 @@ import com.whitedev.bkf.Constants.Companion.WEEK_1
 import com.whitedev.bkf.Constants.Companion.WEEK_2
 import com.whitedev.bkf.Constants.Companion.WEEK_3
 import com.whitedev.bkf.data.network.RestApi
+import com.whitedev.bkf.data.network.pojo.CheckBoxPojo
 import com.whitedev.bkf.model.ServiceResponse
 import com.whitedev.bkf.model.X
 import com.whitedev.bkf.ui.tableview.MyTableAdapter
@@ -26,6 +28,8 @@ import com.whitedev.bkf.ui.tableview.model.CellModel
 import com.whitedev.bkf.ui.tableview.model.ColumnHeaderModel
 import com.whitedev.bkf.ui.tableview.model.RowHeaderModel
 import kotlinx.android.synthetic.main.fragment_planning.*
+import org.greenrobot.eventbus.EventBus
+import org.greenrobot.eventbus.Subscribe
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,13 +38,16 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.nio.charset.Charset
 
+
 class PlanningFragment : Fragment() {
 
+    private lateinit var token: String
     lateinit var tableView: TableView
-    var statusSwipe: Int = 1
+    private var statusSwipe: Int = WEEK_0
     private var previousSize = 0
     private var maxWeek = 1
 
+    private var listCb: MutableList<CheckBoxPojo?> = mutableListOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_planning, container, false)
@@ -48,12 +55,13 @@ class PlanningFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         tableView = table_view
-        statusSwipe = WEEK_0
-
         getList(0)
+        prepareButtons()
+        handleSpinner()
+    }
 
+    private fun prepareButtons() {
         ll_table_view.setOnTouchListener(object : OnSwipeTouchListener(context) {
 
             override fun onSwipeLeft() {
@@ -68,14 +76,15 @@ class PlanningFragment : Fragment() {
         })
 
         iv_back.setOnClickListener {
-            nextAction()
+            if (statusSwipe != WEEK_0)
+                nextAction()
         }
 
         iv_next.setOnClickListener {
-            backAction()
+            if (statusSwipe != WEEK_3)
+                backAction()
         }
 
-        handleSpinner()
     }
 
     private fun prepareSwipe() {
@@ -117,6 +126,9 @@ class PlanningFragment : Fragment() {
             for (i in previousSize - 1 downTo 0)
                 tableView.adapter.removeRow(i)
             previousSize = 0
+
+            listCb.clear()
+
             getList(statusSwipe)
         }
     }
@@ -129,6 +141,10 @@ class PlanningFragment : Fragment() {
             for (i in previousSize - 1 downTo 0)
                 tableView.adapter.removeRow(i)
             previousSize = 0
+
+            listCb.clear()
+
+
             getList(statusSwipe)
         }
     }
@@ -150,7 +166,6 @@ class PlanningFragment : Fragment() {
         spinner.onItemSelectedListener = SpinnerItemSelectedListener()
     }
 
-    private lateinit var token: String
 
     private fun loadHardcodedMenu(position: Int) {
         var json: String?
@@ -234,7 +249,10 @@ class PlanningFragment : Fragment() {
             //prepare only column
             val dataCellList = list[position].data[0].datacell
             for (data in dataCellList) {
-                mColumnHeaderList.add(ColumnHeaderModel(data.name))
+                var columnName = ""
+                if (data.display)
+                    columnName = data.name
+                mColumnHeaderList.add(ColumnHeaderModel(columnName, data.data))
             }
 
             previousSize = list[position].data.size
@@ -243,7 +261,12 @@ class PlanningFragment : Fragment() {
                 val mCList: MutableList<CellModel> = mutableListOf()
 
                 for (j in 0 until dataCellList.size) {
-                    mCList.add(CellModel("id:pos:" + position + "pos2:" + j, list[position].data[i].datacell[j].data))
+                    mCList.add(
+                        CellModel(
+                            list[position].data[i].datacell[2].data + list[position].data[i].datacell[3].data,
+                            list[position].data[i].datacell[j].data, list[position].data[i].datacell[j].name
+                        )
+                    )
                 }
 
                 mCellList.add(mCList)
@@ -252,7 +275,7 @@ class PlanningFragment : Fragment() {
 
         tableView.rowHeaderWidth = 0
         tableView.tableViewListener = MyTableViewListener()
-        //tableView.isIgnoreSelectionColors = true
+        tableView.isIgnoreSelectionColors = true
         tableView.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
         tableView.isFocusableInTouchMode = false
 

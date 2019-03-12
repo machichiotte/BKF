@@ -16,7 +16,6 @@ class MyTableViewListener : ITableViewListener {
     override fun onCellClicked(cellView: RecyclerView.ViewHolder, columnPosition: Int, rowPosition: Int) {
         // Do what you want.
 
-        Log.e("cell0", "click")
     }
 
     /**

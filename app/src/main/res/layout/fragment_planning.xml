@@ -13,7 +13,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAllCaps="true"
-                android:textColor="@android:color/black"
                 android:text="@string/planning_choose_title"
                 android:textSize="20sp"/>
 
@@ -29,28 +28,29 @@
 
         <ImageView
                 android:id="@+id/iv_back"
-                android:layout_width="wrap_content"
+                android:layout_width="48dp"
                 android:layout_toStartOf="@+id/tv_week"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_chevron_left_black_24dp"/>
 
         <TextView
                 android:id="@+id/tv_week"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textColor="@android:color/black"
+                android:textSize="20sp"
                 android:layout_centerInParent="true"
                 android:text="Semaine 06"/>
 
         <ImageView
                 android:id="@+id/iv_next"
-                android:layout_width="wrap_content"
+                android:layout_width="48dp"
                 android:layout_toEndOf="@+id/tv_week"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:src="@drawable/ic_chevron_right_black_24dp"/>
 
     </RelativeLayout>
 
-    <!-- <ScrollView android:layout_width="match_parent" android:layout_height="wrap_content"> </ScrollView>-->
     <LinearLayout
             android:id="@+id/ll_table_view"
             android:layout_width="match_parent" android:orientation="vertical"

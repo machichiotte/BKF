@@ -18,9 +18,9 @@ import com.whitedev.bkf.ui.tableview.model.ColumnHeaderModel
  */
 
 class ColumnHeaderViewHolder(itemView: View, internal val tableView: ITableView) : AbstractSorterViewHolder(itemView) {
-    internal val column_header_container: LinearLayout
-    internal val column_header_textview: TextView
-    internal val column_header_sort_button: ImageButton
+    private val columnHeaderContainer: LinearLayout
+    internal val columnHeaderTextview: TextView
+    internal val columnHeaderSortButton: ImageButton
 
     private val mSortButtonClickListener = View.OnClickListener {
         if (sortState == SortState.ASCENDING) {
@@ -34,25 +34,32 @@ class ColumnHeaderViewHolder(itemView: View, internal val tableView: ITableView)
     }
 
     init {
-        column_header_textview = itemView.findViewById(R.id.column_header_textView)
-        column_header_container = itemView.findViewById(R.id.column_header_container)
-        column_header_sort_button = itemView.findViewById(R.id.column_header_sort_imageButton)
+        columnHeaderTextview = itemView.findViewById(R.id.column_header_textView)
+        columnHeaderContainer = itemView.findViewById(R.id.column_header_container)
+        columnHeaderSortButton = itemView.findViewById(R.id.column_header_sort_imageButton)
 
         // Set click listener to the sort button
-        column_header_sort_button.setOnClickListener(mSortButtonClickListener)
+        columnHeaderSortButton.setOnClickListener(mSortButtonClickListener)
     }
 
     fun setColumnHeaderModel(pColumnHeaderModel: ColumnHeaderModel, pColumnPosition: Int) {
 
         // Change alignment of textView
-        column_header_textview.gravity = Gravity.CENTER_VERTICAL
+        columnHeaderTextview.gravity = Gravity.CENTER_VERTICAL
 
         // Set text data
-        column_header_textview.text = pColumnHeaderModel.id
+        columnHeaderTextview.text = pColumnHeaderModel.id
 
         // It is necessary to remeasure itself.
-        column_header_container.layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
-        column_header_textview.requestLayout()
+        columnHeaderContainer.layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
+
+        if (pColumnHeaderModel.data == "true" || pColumnHeaderModel.data == "false") {
+            columnHeaderContainer.isClickable = false
+            columnHeaderContainer.isFocusable = false
+            columnHeaderContainer.isFocusableInTouchMode = false
+        }
+
+        columnHeaderTextview.requestLayout()
     }
 
     override fun setSelected(p_nSelectionState: AbstractViewHolder.SelectionState) {
@@ -75,15 +82,15 @@ class ColumnHeaderViewHolder(itemView: View, internal val tableView: ITableView)
             nForegroundColorId = R.color.unselected_text_color
         }
 
-        column_header_container.setBackgroundColor(
+        columnHeaderContainer.setBackgroundColor(
             ContextCompat.getColor(
-                column_header_container
+                columnHeaderContainer
                     .context, nBackgroundColorId
             )
         )
-        column_header_textview.setTextColor(
+        columnHeaderTextview.setTextColor(
             ContextCompat.getColor(
-                column_header_container
+                columnHeaderContainer
                     .context, nForegroundColorId
             )
         )
@@ -93,26 +100,26 @@ class ColumnHeaderViewHolder(itemView: View, internal val tableView: ITableView)
         super.onSortingStatusChanged(pSortState)
 
         // It is necessary to remeasure itself.
-        column_header_container.layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
+        columnHeaderContainer.layoutParams.width = LinearLayout.LayoutParams.WRAP_CONTENT
 
         controlSortState(pSortState)
 
-        column_header_textview.requestLayout()
-        column_header_sort_button.requestLayout()
-        column_header_container.requestLayout()
+        columnHeaderTextview.requestLayout()
+        columnHeaderSortButton.requestLayout()
+        columnHeaderContainer.requestLayout()
         itemView.requestLayout()
     }
 
     private fun controlSortState(pSortState: SortState) {
         if (pSortState == SortState.ASCENDING) {
-            column_header_sort_button.visibility = View.VISIBLE
-            column_header_sort_button.setImageResource(R.drawable.ic_chevron_left_black_24dp)
+            columnHeaderSortButton.visibility = View.VISIBLE
+            columnHeaderSortButton.setImageResource(R.drawable.ic_chevron_left_black_24dp)
 
         } else if (pSortState == SortState.DESCENDING) {
-            column_header_sort_button.visibility = View.VISIBLE
-            column_header_sort_button.setImageResource(R.drawable.ic_chevron_right_black_24dp)
+            columnHeaderSortButton.visibility = View.VISIBLE
+            columnHeaderSortButton.setImageResource(R.drawable.ic_chevron_right_black_24dp)
         } else {
-            column_header_sort_button.visibility = View.GONE
+            columnHeaderSortButton.visibility = View.GONE
         }
     }
 }
