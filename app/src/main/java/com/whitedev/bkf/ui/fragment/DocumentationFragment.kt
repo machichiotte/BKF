@@ -9,6 +9,7 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import kotlinx.android.synthetic.main.fragment_documentation.*
 import android.widget.ProgressBar
+import com.whitedev.bkf.MainActivity
 import com.whitedev.bkf.R
 
 class DocumentationFragment : Fragment() {
@@ -26,6 +27,9 @@ class DocumentationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as MainActivity).setActionBarTitle("Documentation")
+
         prepareWebview()
     }
 

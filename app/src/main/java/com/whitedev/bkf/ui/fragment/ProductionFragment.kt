@@ -32,6 +32,7 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.nio.charset.Charset
+import java.util.*
 
 class ProductionFragment : Fragment() {
 
@@ -95,6 +96,9 @@ class ProductionFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as MainActivity).setActionBarTitle("Production")
+
         tableView = prod_table_view
         getList(0)
         prepareButtons()
@@ -236,7 +240,7 @@ class ProductionFragment : Fragment() {
                 .build()
             val service = retrofit.create(RestApi::class.java)
 
-            val call: Call<ServiceResponse> = service.getListColumnAtelier(tok)
+            val call: Call<ServiceResponse> = service.getListDataAtelier(tok, Date().time)
 
             call.enqueue(object : Callback<ServiceResponse> {
                 override fun onResponse(call: Call<ServiceResponse>, response: Response<ServiceResponse>) {
@@ -269,7 +273,10 @@ class ProductionFragment : Fragment() {
             maxWeek = list.size
             prepareSwipe()
 
-            tv_prod_week.text = "Semaine " + list[position].week
+            val msg = String.format(resources.getString(R.string.week_message), list[position].week)
+
+            tv_prod_week.text = msg
+
 
             var colorString = list[position].color
             if (!colorString.contains("#")) {

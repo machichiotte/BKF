@@ -5,15 +5,150 @@
               android:orientation="vertical"
               android:padding="16dp">
 
-    <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="cnotrol"
-            android:textSize="40sp" />
+    <!-- Order -->
+    <LinearLayout
+            android:id="@+id/ll_order"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/command_name"
+                android:textAllCaps="true"
+                android:textSize="20sp"/>
+
+        <EditText
+                android:id="@+id/edt_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="number"
+                android:maxLength="5"
+                android:hint="@string/command_enter_number"/>
+
+    </LinearLayout>
+
+    <!-- Landmark -->
+    <LinearLayout
+            android:id="@+id/ll_landmark"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:text="@string/landmark"/>
+
+        <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinner_landmark"/>
+    </LinearLayout>
+
+    <!-- Result -->
+    <LinearLayout
+            android:id="@+id/ll_result"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:id="@+id/tv_client"/>
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAllCaps="true"
+                android:id="@+id/tv_description"/>
+
+    </LinearLayout>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:id="@+id/tv_validation"
+              android:text="Valider"
+              android:padding="16dp" android:background="@android:color/holo_blue_light" android:textColor="@android:color/white"/>
+
+
+    <!-- Photos -->
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:gravity="center_vertical"
+                  android:orientation="horizontal">
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pictures"
+                android:textAllCaps="true"/>
+
+        <LinearLayout
+                android:layout_marginStart="8dp"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/ll_pic_list"/>
+
+        <ImageView
+                android:layout_marginStart="8dp"
+                android:layout_width="72dp"
+                android:layout_height="72dp"
+                android:id="@+id/iv_add_pic"
+                android:src="@drawable/ic_add_circle_black_24dp"/>
+    </LinearLayout>
+
+    <!-- Comment -->
+    <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <TextView android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:text="@string/comment"
+                  android:textAllCaps="true"/>
+
+        <EditText
+                android:id="@+id/edt_comment"
+                android:layout_margin="8dp"
+                android:maxLines="10"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/comment_add"/>
+
+    </LinearLayout>
+
+    <!-- Control -->
+    <LinearLayout
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/control_validation"/>
+
+        <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/cb_control"/>
+    </LinearLayout>
+
+    <!-- Save & Send -->
     <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="control descr"/>
+            android:text="@string/save"
+            android:id="@+id/tv_save_control"/>
 
 </LinearLayout>

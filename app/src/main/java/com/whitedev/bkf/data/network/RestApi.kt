@@ -1,6 +1,7 @@
 package com.whitedev.bkf.data.network
 
 import com.whitedev.bkf.model.ServiceResponse
+import com.whitedev.bkf.model.atelier.ServiceResponseAtelier
 import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
@@ -18,10 +19,9 @@ interface RestApi {
         ) password: String
     ): Call<ServiceResponse>
 
-    @GET("getListColumnAtelier/{token}")
-    fun getListColumnAtelier(@Path("token", encoded = true) token: String): Call<ServiceResponse>
+    @GET("getListDataAtelier/{token}/{timestamp}")
+    fun getListDataAtelier(@Path("token", encoded = true) token: String, @Path("timestamp", encoded = true) timestamp: Long): Call<ServiceResponse>
 
-    @GET("getListColumnAtelier/{token}")
-    fun getListColumnAtelierObs(@Path("token", encoded = true) token: String): Observable<ServiceResponse>
-
+    @GET("getListAtelier/{token}/{timestamp}")
+    fun getListAtelier(@Path("token", encoded = true) token: String, @Path("timestamp", encoded = true) timestamp: Long): Call<ServiceResponseAtelier>
 }

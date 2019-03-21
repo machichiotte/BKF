@@ -8,9 +8,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import android.widget.Toast
 import com.evrencoskun.tableview.TableView
 import com.google.gson.Gson
 import com.whitedev.bkf.*
@@ -22,14 +23,14 @@ import com.whitedev.bkf.data.network.RestApi
 import com.whitedev.bkf.data.network.pojo.CheckBoxPojo
 import com.whitedev.bkf.model.ServiceResponse
 import com.whitedev.bkf.model.X
+import com.whitedev.bkf.model.atelier.Atelier
+import com.whitedev.bkf.model.atelier.ServiceResponseAtelier
 import com.whitedev.bkf.ui.tableview.MyTableAdapter
 import com.whitedev.bkf.ui.tableview.MyTableViewListener
 import com.whitedev.bkf.ui.tableview.model.CellModel
 import com.whitedev.bkf.ui.tableview.model.ColumnHeaderModel
 import com.whitedev.bkf.ui.tableview.model.RowHeaderModel
 import kotlinx.android.synthetic.main.fragment_planning.*
-import org.greenrobot.eventbus.EventBus
-import org.greenrobot.eventbus.Subscribe
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -38,16 +39,15 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.nio.charset.Charset
 
-
 class PlanningFragment : Fragment() {
 
     private lateinit var token: String
-    lateinit var tableView: TableView
+    private lateinit var tableView: TableView
     private var statusSwipe: Int = WEEK_0
     private var previousSize = 0
     private var maxWeek = 1
-
     private var listCb: MutableList<CheckBoxPojo?> = mutableListOf()
+    private var listAtelier: List<Atelier> = mutableListOf()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_planning, container, false)
@@ -55,10 +55,14 @@ class PlanningFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        (activity as MainActivity).setActionBarTitle("Planning")
+
         tableView = table_view
-        getList(0)
         prepareButtons()
-        handleSpinner()
+
+        getListAtelier()
+        getList(0)
     }
 
     private fun prepareButtons() {
@@ -84,7 +88,6 @@ class PlanningFragment : Fragment() {
             if (statusSwipe != WEEK_3)
                 backAction()
         }
-
     }
 
     private fun prepareSwipe() {
@@ -128,7 +131,6 @@ class PlanningFragment : Fragment() {
             previousSize = 0
 
             listCb.clear()
-
             getList(statusSwipe)
         }
     }
@@ -144,28 +146,27 @@ class PlanningFragment : Fragment() {
 
             listCb.clear()
 
-
             getList(statusSwipe)
         }
     }
 
-    private fun handleSpinner() {
+    private fun handleSpinner(list: MutableList<String?>) {
         val spinner: Spinner = planning_spinner
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        ArrayAdapter.createFromResource(
-            activity,
-            R.array.planning_array,
-            android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            // Specify the layout to use when the list of choices appears
+        val myAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list)
+
+        myAdapter.also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            // Apply the adapter to the spinner
             spinner.adapter = adapter
         }
 
-        spinner.onItemSelectedListener = SpinnerItemSelectedListener()
-    }
+        spinner.onItemSelectedListener = object : OnItemSelectedListener {
+            override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View, position: Int, id: Long) {
+                getList(statusSwipe)
+            }
 
+            override fun onNothingSelected(parentView: AdapterView<*>) {}
+        }
+    }
 
     private fun loadHardcodedMenu(position: Int) {
         var json: String?
@@ -189,12 +190,11 @@ class PlanningFragment : Fragment() {
     }
 
     private fun getList(position: Int) {
-
         loadHardcodedMenu(position)
-        //getListColumnAtelier(position)
+        //getListDataAtelier(position)
     }
 
-    private fun getListColumnAtelier(position: Int) {
+    private fun getListDataAtelier(position: Int) {
         token = "FQFD5165DQSVCD1QSV651DSFV65FD" //fixme delete this mock
 
         token.let { tok ->
@@ -204,7 +204,7 @@ class PlanningFragment : Fragment() {
                 .build()
             val service = retrofit.create(RestApi::class.java)
 
-            val call: Call<ServiceResponse> = service.getListColumnAtelier(tok)
+            val call: Call<ServiceResponse> = service.getListDataAtelier(tok, System.currentTimeMillis() / 1000)
 
             call.enqueue(object : Callback<ServiceResponse> {
                 override fun onResponse(call: Call<ServiceResponse>, response: Response<ServiceResponse>) {
@@ -218,7 +218,49 @@ class PlanningFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<ServiceResponse>, t: Throwable) {
-                    Log.e("test", "failure")
+                    Log.e("test", "failure::getListDataAtelier")
+                }
+            })
+
+        }
+    }
+
+    private fun getListAtelier() {
+        token = "FQFD5165DQSVCD1QSV651DSFV65FD" //fixme delete this mock
+
+        token.let { tok ->
+            val retrofit = Retrofit.Builder()
+                .baseUrl(Utils.checkBaseUrl(this.activity!!))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val service = retrofit.create(RestApi::class.java)
+
+            val call: Call<ServiceResponseAtelier> = service.getListAtelier(tok, System.currentTimeMillis() / 1000)
+
+            call.enqueue(object : Callback<ServiceResponseAtelier> {
+                override fun onResponse(
+                    call: Call<ServiceResponseAtelier>,
+                    response: Response<ServiceResponseAtelier>
+                ) {
+                    Handler().postDelayed({
+                        response.body()?.let { body ->
+                            if (body.status == Constants.SUCCESS) {
+                                val listStr: MutableList<String?> = mutableListOf()
+
+                                listAtelier = body.list
+                                Log.e("test", "listAtelier::" + listAtelier.size)
+
+                                for (element in listAtelier)
+                                    listStr.add(element.name)
+
+                                handleSpinner(listStr)
+                            }
+                        }
+                    }, 1500)
+                }
+
+                override fun onFailure(call: Call<ServiceResponseAtelier>, t: Throwable) {
+                    Log.e("test", "failure::getListAtelier")
                 }
             })
 
@@ -237,39 +279,68 @@ class PlanningFragment : Fragment() {
             maxWeek = list.size
             prepareSwipe()
 
-            tv_week.text = "Semaine " + list[position].week
+            tv_week.text = String.format(resources.getString(R.string.week_message), list[position].week)
 
-            var colorString = list[position].color
-            if (!colorString.contains("#")) {
-                colorString = "#$colorString"
+            list[position].color.let {
+                var colorString = it
+                if (!colorString.contains("#")) {
+                    colorString = "#$colorString"
+                }
+                tv_week.setTextColor(Color.parseColor(colorString))
             }
-
-            tv_week.setTextColor(Color.parseColor(colorString))
 
             //prepare only column
-            val dataCellList = list[position].data[0].datacell
-            for (data in dataCellList) {
-                var columnName = ""
-                if (data.display)
-                    columnName = data.name
-                mColumnHeaderList.add(ColumnHeaderModel(columnName, data.data))
-            }
 
-            previousSize = list[position].data.size
-            for (i in 0 until previousSize) {
-                mRowHeaderList.add(RowHeaderModel("nada"))
-                val mCList: MutableList<CellModel> = mutableListOf()
+            list[position].data.let {
+                list[position].data[0].datacell.let {
+                    val dataCellList = list[position].data[0].datacell
+                    for (data in dataCellList) {
+                        var columnName = ""
+                        if (data.display)
+                            columnName = data.name
+                        mColumnHeaderList.add(ColumnHeaderModel(columnName, data.data))
+                    }
 
-                for (j in 0 until dataCellList.size) {
-                    mCList.add(
-                        CellModel(
-                            list[position].data[i].datacell[2].data + list[position].data[i].datacell[3].data,
-                            list[position].data[i].datacell[j].data, list[position].data[i].datacell[j].name
-                        )
-                    )
+                    previousSize = list[position].data.size
+                    for (i in 0 until previousSize) {
+
+                        mRowHeaderList.add(RowHeaderModel(""))
+                        val mCList: MutableList<CellModel> = mutableListOf()
+
+                        var isInTab = 0
+
+                        for (j in 0 until dataCellList.size) {
+                            val listId = arrayListOf<String>()
+
+                            //prepare listId
+                            for (atelier in listAtelier) {
+                                if (planning_spinner.selectedItem != null && atelier.name == planning_spinner.selectedItem.toString())
+                                    for (idd in atelier.id)
+                                        listId.add(idd)
+                            }
+
+                            for (id in listId) {
+
+                                if (list[position].data[i].datacell[j].name == id && list[position].data[i].datacell[j].data == null)
+                                    isInTab++
+                            }
+
+                            mCList.add(
+                                CellModel(
+                                    list[position].data[i].datacell[2].data + list[position].data[i].datacell[3].data,
+                                    list[position].data[i].datacell[j].data, list[position].data[i].datacell[j].name
+                                )
+                            )
+
+
+                        }
+
+
+                        if (isInTab == 0)
+                            mCellList.add(mCList)
+                    }
                 }
 
-                mCellList.add(mCList)
             }
         }
 

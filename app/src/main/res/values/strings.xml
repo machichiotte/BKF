@@ -14,6 +14,16 @@
     <string name="planning_choose_title">Choix atelier</string>
     <string name="planning_failure_msg">modifier ce message d\'erreur planningframgnet</string>
     <string name="update">Mettre à jour</string>
+    <string name="command_name">Nom commande :</string>
+    <string name="command_enter_number">Entrer le numéro de commande</string>
+    <string name="landmark">Repère</string>
+    <string name="pictures">photos</string>
+    <string name="comment">commentaire</string>
+    <string name="comment_add">Ajouter un commentaire</string>
+    <string name="save">Enregistrer</string>
+    <string name="control_validation">Valider le contrôle</string>
+
+    <string name="week_message" formatted="true">Semaine %1$s</string>
 
     <string-array name="planning_array">
         <item>Rail</item>
@@ -21,5 +31,35 @@
         <item>3</item>
         <item>4</item>
         <item>5</item>
+    </string-array>
+
+
+    <string-array name="control_array">
+        <item>A</item>
+        <item>B</item>
+        <item>C</item>
+        <item>D</item>
+        <item>E</item>
+        <item>F</item>
+        <item>G</item>
+        <item>H</item>
+        <item>I</item>
+        <item>J</item>
+        <item>K</item>
+        <item>L</item>
+        <item>M</item>
+        <item>N</item>
+        <item>O</item>
+        <item>P</item>
+        <item>Q</item>
+        <item>R</item>
+        <item>S</item>
+        <item>T</item>
+        <item>U</item>
+        <item>V</item>
+        <item>W</item>
+        <item>X</item>
+        <item>Y</item>
+        <item>Z</item>
     </string-array>
 </resources>

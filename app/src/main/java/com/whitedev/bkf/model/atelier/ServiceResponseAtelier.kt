@@ -1,12 +1,12 @@
-package com.whitedev.bkf.model
+package com.whitedev.bkf.model.atelier
 
 import android.support.annotation.Nullable
 import com.google.gson.annotations.SerializedName
 
-data class ServiceResponse(
+data class ServiceResponseAtelier(
     @Nullable
     @SerializedName("list")
-    val list: List<X>,
+    val list: List<Atelier>,
     @Nullable
     @SerializedName("method")
     val method: String,

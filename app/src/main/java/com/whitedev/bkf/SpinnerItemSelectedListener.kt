@@ -12,6 +12,7 @@ class SpinnerItemSelectedListener : AdapterView.OnItemSelectedListener {
             "OnItemSelectedListener : " + parent.getItemAtPosition(pos).toString(),
             Toast.LENGTH_SHORT
         ).show()
+
     }
 
     override fun onNothingSelected(arg0: AdapterView<*>) {
