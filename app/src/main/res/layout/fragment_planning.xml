@@ -1,76 +1,99 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent"
-              android:orientation="vertical"
-              android:paddingTop="16dp">
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:gravity="center_horizontal"
-                  android:orientation="horizontal">
-        <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAllCaps="true"
-                android:text="@string/planning_choose_title"
-                android:textSize="20sp"/>
-
-        <Spinner android:layout_marginStart="16dp"
-                 android:layout_width="wrap_content"
-                 android:id="@+id/planning_spinner"
-                 android:layout_height="wrap_content"/>
-
-    </LinearLayout>
-
-    <RelativeLayout android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-        <ImageView
-                android:id="@+id/iv_back"
-                android:layout_width="48dp"
-                android:layout_toStartOf="@+id/tv_week"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_chevron_left_black_24dp"/>
-
-        <TextView
-                android:id="@+id/tv_week"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"
-                android:textSize="20sp"
-                android:layout_centerInParent="true"
-                android:text="Semaine 06"/>
-
-        <ImageView
-                android:id="@+id/iv_next"
-                android:layout_width="48dp"
-                android:layout_toEndOf="@+id/tv_week"
-                android:layout_height="48dp"
-                android:src="@drawable/ic_chevron_right_black_24dp"/>
-
-    </RelativeLayout>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
     <LinearLayout
-            android:id="@+id/ll_table_view"
-            android:layout_width="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            android:layout_height="wrap_content">
+            android:id="@+id/ll_planning"
+            android:visibility="invisible"
+            android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical"
+                  android:paddingTop="16dp">
 
+        <LinearLayout  android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      android:gravity="center_horizontal"
+                      android:orientation="horizontal">
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAllCaps="true"
+                    android:text="@string/planning_choose_title"
+                    android:textSize="20sp"/>
 
-        <com.evrencoskun.tableview.TableView
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginStart="32dp"
-                android:layout_marginEnd="32dp"
-                android:descendantFocusability="blocksDescendants"
-                android:clickable="false"
-                android:focusable="false"
-                android:id="@+id/table_view"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"/>
+            <Spinner android:layout_marginStart="16dp"
+                     android:layout_width="wrap_content"
+                     android:id="@+id/planning_spinner"
+                     android:gravity="end"
+                     android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+            <ImageView
+                    android:id="@+id/iv_back"
+                    android:layout_width="48dp"
+                    android:layout_toStartOf="@+id/tv_week"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_chevron_left_black_24dp"/>
+
+            <TextView
+                    android:id="@+id/tv_week"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:textSize="20sp"
+                    android:layout_centerInParent="true"
+                    android:text="Semaine 06"/>
+
+            <ImageView
+                    android:id="@+id/iv_next"
+                    android:layout_width="48dp"
+                    android:layout_toEndOf="@+id/tv_week"
+                    android:layout_height="48dp"
+                    android:src="@drawable/ic_chevron_right_black_24dp"/>
+
+        </RelativeLayout>
+
+        <LinearLayout
+                android:id="@+id/ll_table_view"
+                android:layout_width="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:layout_height="wrap_content">
+
+            <com.evrencoskun.tableview.TableView
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginStart="32dp"
+                    android:layout_marginEnd="32dp"
+                    android:descendantFocusability="blocksDescendants"
+                    android:clickable="false"
+                    android:focusable="false"
+                    android:id="@+id/table_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
+        </LinearLayout>
+
     </LinearLayout>
 
-</LinearLayout>
+    <ProgressBar android:id="@+id/progress_planning" android:visibility="visible" android:layout_centerInParent="true"
+                 android:layout_width="wrap_content" android:layout_height="wrap_content"/>
+
+    <LinearLayout android:orientation="vertical" android:id="@+id/rl_empty_state" android:layout_width="match_parent"
+                  android:gravity="center"
+                  android:layout_height="wrap_content" android:visibility="gone" android:layout_centerInParent="true">
+
+        <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+                   android:src="@drawable/bkf"/>
+
+        <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:textSize="18sp" android:textColor="@color/unselected_cb"
+                  android:text="@string/planning_empty_state"/>
+    </LinearLayout>
+</RelativeLayout>

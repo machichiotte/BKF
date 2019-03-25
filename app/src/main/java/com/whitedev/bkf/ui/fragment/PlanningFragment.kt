@@ -39,6 +39,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.io.IOException
 import java.nio.charset.Charset
 
+//todo create abstract fragment for planning and production
 class PlanningFragment : Fragment() {
 
     private lateinit var token: String
@@ -49,6 +50,8 @@ class PlanningFragment : Fragment() {
     private var listCb: MutableList<CheckBoxPojo?> = mutableListOf()
     private var listAtelier: List<Atelier> = mutableListOf()
 
+    private lateinit var spinner: Spinner
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_planning, container, false)
     }
@@ -56,18 +59,16 @@ class PlanningFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).setActionBarTitle("Planning")
+        (activity as MainActivity).setActionBarTitle(getString(R.string.planning))
 
         tableView = table_view
         prepareButtons()
 
-        getListAtelier()
-        getList(0)
+        getListAtelier(true)
     }
 
     private fun prepareButtons() {
         ll_table_view.setOnTouchListener(object : OnSwipeTouchListener(context) {
-
             override fun onSwipeLeft() {
                 super.onSwipeLeft()
                 backAction()
@@ -150,21 +151,42 @@ class PlanningFragment : Fragment() {
         }
     }
 
-    private fun handleSpinner(list: MutableList<String?>) {
-        val spinner: Spinner = planning_spinner
-        val myAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list)
+    private fun showProgressBar(isVisible: Boolean) {
+        if (isVisible) {
+            progress_planning.visibility = View.VISIBLE
+            rl_empty_state.visibility = View.GONE
+        } else
+            progress_planning.visibility = View.GONE
+    }
 
-        myAdapter.also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = adapter
-        }
+    private fun handleSpinner(list: MutableList<String?>, firstEnter: Boolean) {
 
-        spinner.onItemSelectedListener = object : OnItemSelectedListener {
-            override fun onItemSelected(parentView: AdapterView<*>, selectedItemView: View, position: Int, id: Long) {
-                getList(statusSwipe)
+        if (planning_spinner != null) {
+            spinner = planning_spinner
+            val myAdapter = ArrayAdapter<String>(context, android.R.layout.simple_spinner_item, list)
+
+            myAdapter.also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = adapter
             }
 
-            override fun onNothingSelected(parentView: AdapterView<*>) {}
+            spinner.onItemSelectedListener = object : OnItemSelectedListener {
+                override fun onItemSelected(
+                    parentView: AdapterView<*>,
+                    selectedItemView: View,
+                    position: Int,
+                    id: Long
+                ) {
+                    getList(statusSwipe)
+                }
+
+                override fun onNothingSelected(parentView: AdapterView<*>) {}
+            }
+
+            if (firstEnter) {
+                ll_planning.visibility = View.VISIBLE
+                getList(0)
+            }
         }
     }
 
@@ -190,6 +212,9 @@ class PlanningFragment : Fragment() {
     }
 
     private fun getList(position: Int) {
+
+        showProgressBar(true)
+
         loadHardcodedMenu(position)
         //getListDataAtelier(position)
     }
@@ -225,7 +250,7 @@ class PlanningFragment : Fragment() {
         }
     }
 
-    private fun getListAtelier() {
+    private fun getListAtelier(firstEnter: Boolean) {
         token = "FQFD5165DQSVCD1QSV651DSFV65FD" //fixme delete this mock
 
         token.let { tok ->
@@ -253,7 +278,8 @@ class PlanningFragment : Fragment() {
                                 for (element in listAtelier)
                                     listStr.add(element.name)
 
-                                handleSpinner(listStr)
+                                handleSpinner(listStr, firstEnter)
+
                             }
                         }
                     }, 1500)
@@ -344,13 +370,26 @@ class PlanningFragment : Fragment() {
             }
         }
 
-        tableView.rowHeaderWidth = 0
-        tableView.tableViewListener = MyTableViewListener()
-        tableView.isIgnoreSelectionColors = true
-        tableView.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
-        tableView.isFocusableInTouchMode = false
+        if (mCellList.size > 0) {
 
-        adapter.setAllItems(mColumnHeaderList, mRowHeaderList, mCellList)
+            tableView.visibility = View.VISIBLE
+
+            tableView.rowHeaderWidth = 0
+            tableView.tableViewListener = MyTableViewListener()
+            tableView.isIgnoreSelectionColors = true
+            tableView.descendantFocusability = ViewGroup.FOCUS_AFTER_DESCENDANTS
+            tableView.isFocusableInTouchMode = false
+
+            adapter.setAllItems(mColumnHeaderList, mRowHeaderList, mCellList)
+        } else {
+            tableView.visibility = View.GONE
+            rl_empty_state.visibility = View.VISIBLE
+
+            //todo add empty state
+        }
+
+
+        showProgressBar(false)
     }
 
     companion object {

@@ -21,7 +21,6 @@ import com.whitedev.bkf.ui.tableview.MyTableViewListener
 import com.whitedev.bkf.ui.tableview.model.CellModel
 import com.whitedev.bkf.ui.tableview.model.ColumnHeaderModel
 import com.whitedev.bkf.ui.tableview.model.RowHeaderModel
-import kotlinx.android.synthetic.main.fragment_documentation.*
 import kotlinx.android.synthetic.main.fragment_production.*
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -97,7 +96,7 @@ class ProductionFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).setActionBarTitle("Production")
+        (activity as MainActivity).setActionBarTitle(getString(R.string.production))
 
         tableView = prod_table_view
         getList(0)

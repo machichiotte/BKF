@@ -45,7 +45,7 @@ class ControlFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).setActionBarTitle("Control")
+        (activity as MainActivity).setActionBarTitle(getString(R.string.control))
 
         handleSpinner()
         handleAddPicture()

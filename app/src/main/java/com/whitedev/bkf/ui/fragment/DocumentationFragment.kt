@@ -28,7 +28,7 @@ class DocumentationFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).setActionBarTitle("Documentation")
+        (activity as MainActivity).setActionBarTitle(getString(R.string.documentation))
 
         prepareWebview()
     }
