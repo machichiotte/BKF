@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
+import android.widget.ImageView
 import android.widget.Spinner
 import com.evrencoskun.tableview.TableView
 import com.google.gson.Gson
@@ -52,6 +53,9 @@ class PlanningFragment : Fragment() {
 
     private lateinit var spinner: Spinner
 
+    private lateinit var ivBack : ImageView
+    private lateinit var ivNext : ImageView
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_planning, container, false)
     }
@@ -68,6 +72,10 @@ class PlanningFragment : Fragment() {
     }
 
     private fun prepareButtons() {
+
+        ivBack = iv_back
+        ivNext = iv_next
+
         ll_table_view.setOnTouchListener(object : OnSwipeTouchListener(context) {
             override fun onSwipeLeft() {
                 super.onSwipeLeft()
@@ -80,12 +88,12 @@ class PlanningFragment : Fragment() {
             }
         })
 
-        iv_back.setOnClickListener {
+        ivBack.setOnClickListener {
             if (statusSwipe != WEEK_0)
                 nextAction()
         }
 
-        iv_next.setOnClickListener {
+        ivNext.setOnClickListener {
             if (statusSwipe != WEEK_3)
                 backAction()
         }
@@ -94,30 +102,30 @@ class PlanningFragment : Fragment() {
     private fun prepareSwipe() {
         when (statusSwipe) {
             WEEK_1 -> {
-                iv_back.visibility = View.VISIBLE
+                ivBack.visibility = View.VISIBLE
 
                 if (maxWeek < 3)
-                    iv_next.visibility = View.GONE
+                    ivNext.visibility = View.GONE
                 else
-                    iv_next.visibility = View.VISIBLE
+                    ivNext.visibility = View.VISIBLE
             }
 
             WEEK_0 -> {
-                iv_back.visibility = View.GONE
+                ivBack.visibility = View.GONE
 
                 if (maxWeek < 2)
-                    iv_next.visibility = View.GONE
+                    ivNext.visibility = View.GONE
                 else
-                    iv_next.visibility = View.VISIBLE
+                    ivNext.visibility = View.VISIBLE
             }
 
             WEEK_2 -> {
-                iv_next.visibility = View.VISIBLE
+                ivNext.visibility = View.VISIBLE
                 if (maxWeek < 4)
-                    iv_next.visibility = View.GONE
+                    ivNext.visibility = View.GONE
             }
             WEEK_3 -> {
-                iv_next.visibility = View.GONE
+                ivNext.visibility = View.GONE
             }
         }
     }

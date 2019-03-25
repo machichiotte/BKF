@@ -25,6 +25,7 @@
 
     <string name="week_message" formatted="true">Semaine %1$s</string>
     <string name="planning_empty_state">Pas de données à afficher</string>
+    <string name="validate">Valider</string>
 
     <string-array name="planning_array">
         <item>Rail</item>
