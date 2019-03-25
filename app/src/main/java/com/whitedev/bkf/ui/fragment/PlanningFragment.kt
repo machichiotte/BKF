@@ -220,7 +220,6 @@ class PlanningFragment : Fragment() {
     }
 
     private fun getList(position: Int) {
-
         showProgressBar(true)
 
         //loadHardcodedMenu(position)

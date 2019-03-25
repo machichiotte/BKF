@@ -210,10 +210,10 @@ class ProductionFragment : Fragment() {
     }
 
     private fun getList(position: Int) {
+        //todo add loader
 
-        //todo supprimer plus tard
-        loadHardcodedMenu(position)
-        //getListColumnAtelier(position)
+        //loadHardcodedMenu(position)
+        getListColumnAtelier(position)
     }
 
     private fun getListColumnAtelier(position: Int) {
@@ -285,7 +285,6 @@ class ProductionFragment : Fragment() {
     }
 
     private fun prepareTableViewForPosition(list: List<X>, position: Int) {
-
         val adapter = MyTableAdapter(context)
         tableView.adapter = adapter
 
