@@ -55,35 +55,25 @@ class ProductionFragment : Fragment() {
 
     @Subscribe
     fun onCheckBoxEvent(event: CheckBoxSelectionEvent) {
-        val cbObject = CheckBoxPojo(event.column, event.id, event.isCkd)
+        val cbObject = CheckBoxPojo(event.id, event.column, event.isCkd)
 
-        var plop = true
+        var isNewCheckBox = true
 
         for (cb in listCb) {
             cb?.let {
                 if (it.id!!.contains(event.id.toString()) && it.name == event.column) {
-                    Log.e("test", "naming_it.id::" + it.id)
-                    Log.e("test", "naming_event.id::" + event.id)
-                    Log.e("test", "naming_it.name::" + it.name)
-                    Log.e("test", "naming_event.column::" + event.column)
-                    Log.e("test", "size1::" + listCb.size)
-
                     if (it.isChk != event.isCkd) {
                         listCb.remove(it)
-                        Log.e("test", "size2::" + listCb.size)
                         listCb.add(cbObject)
                     }
 
-                    plop = false
-                    Log.e("test", "size3::" + listCb.size)
+                    isNewCheckBox = false
                 }
             }
         }
 
-        Log.e("test", "size4::" + listCb.size)
-        if (plop)
+        if (isNewCheckBox)
             listCb.add(cbObject)
-        Log.e("test", "size5::" + listCb.size)
 
         btn_send.isEnabled = true
     }
@@ -133,11 +123,7 @@ class ProductionFragment : Fragment() {
     }
 
     private fun sendModifiedData() {
-        //todo ajouter l'envoi à JEREM
-        Toast.makeText(activity, "Je viens d'envoyer " + listCb.size + " modifications", Toast.LENGTH_SHORT).show()
-        listCb.clear()
-        btn_send.isEnabled = false
-
+        updateListData()
     }
 
     private fun prepareSwipe() {
@@ -225,6 +211,7 @@ class ProductionFragment : Fragment() {
 
     private fun getList(position: Int) {
 
+        //todo supprimer plus tard
         loadHardcodedMenu(position)
         //getListColumnAtelier(position)
     }
@@ -247,6 +234,43 @@ class ProductionFragment : Fragment() {
                         response.body()?.let { body ->
                             if (body.status == Constants.SUCCESS) {
                                 prepareTableViewForPosition(body.list, position)
+                            }
+                        }
+                    }, 1500)
+                }
+
+                override fun onFailure(call: Call<ServiceResponse>, t: Throwable) {
+                    Log.e("test", "failure")
+                }
+            })
+
+        }
+    }
+
+    private fun updateListData() {
+        token = "FQFD5165DQSVCD1QSV651DSFV65FD" //fixme delete this mock
+
+        token.let { tok ->
+            val retrofit = Retrofit.Builder()
+                .baseUrl(Utils.checkBaseUrl(this.activity!!))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val service = retrofit.create(RestApi::class.java)
+
+            val gson = Gson()
+            val jsonInString = gson.toJson(listCb)
+
+            val call: Call<ServiceResponse> = service.updateListData(tok, jsonInString)
+
+            call.enqueue(object : Callback<ServiceResponse> {
+                override fun onResponse(call: Call<ServiceResponse>, response: Response<ServiceResponse>) {
+                    Handler().postDelayed({
+                        response.body()?.let { body ->
+                            if (body.status == "SUCCESS") {
+                                btn_send.isEnabled = false
+                                listCb.clear()
+                            } else {
+                                Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }, 1500)

@@ -1,3 +1,3 @@
 package com.whitedev.bkf
 
-class CheckBoxSelectionEvent(val column: String?, val id: String?, val isCkd: Boolean)
+class CheckBoxSelectionEvent(val id: String?, val column: String?, val isCkd: Boolean)

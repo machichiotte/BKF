@@ -215,8 +215,8 @@ class PlanningFragment : Fragment() {
 
         showProgressBar(true)
 
-        loadHardcodedMenu(position)
-        //getListDataAtelier(position)
+        //loadHardcodedMenu(position)
+        getListDataAtelier(position)
     }
 
     private fun getListDataAtelier(position: Int) {

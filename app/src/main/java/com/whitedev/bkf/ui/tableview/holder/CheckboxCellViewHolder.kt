@@ -11,29 +11,29 @@ import org.greenrobot.eventbus.EventBus
 
 class CheckboxCellViewHolder(itemView: View) : AbstractViewHolder(itemView) {
 
-    private val cell_checkbox: CheckBox
+    private val cellCheckbox: CheckBox
 
     init {
-        cell_checkbox = itemView.findViewById(R.id.cell_cb)
+        cellCheckbox = itemView.findViewById(R.id.cell_cb)
     }
 
     fun setCellModel(p_jModel: CellModel) {
         val isChecked = p_jModel.data.toString()
 
         if (p_jModel.data == null) {
-            cell_checkbox.visibility = View.INVISIBLE
-            cell_checkbox.isClickable = false
+            cellCheckbox.visibility = View.INVISIBLE
+            cellCheckbox.isClickable = false
         } else {
-            cell_checkbox.isChecked = java.lang.Boolean.valueOf(isChecked)
-            cell_checkbox.setOnCheckedChangeListener { _, isCkd ->
-                EventBus.getDefault().post(CheckBoxSelectionEvent(p_jModel.data.toString(), p_jModel.getColumn(), isCkd))
+            cellCheckbox.isChecked = java.lang.Boolean.valueOf(isChecked)
+            cellCheckbox.setOnCheckedChangeListener { _, isCkd ->
+                EventBus.getDefault().post(CheckBoxSelectionEvent(p_jModel.id, p_jModel.getColumn(), isCkd))
             }
         }
     }
 
     override fun setSelected(p_nSelectionState: AbstractViewHolder.SelectionState) {
         when (p_nSelectionState) {
-            AbstractViewHolder.SelectionState.SELECTED -> cell_checkbox.isChecked = !cell_checkbox.isChecked
+            AbstractViewHolder.SelectionState.SELECTED -> cellCheckbox.isChecked = !cellCheckbox.isChecked
             else -> {
             }
         }

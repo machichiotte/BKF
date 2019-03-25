@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.provider.MediaStore
 import android.support.v4.app.Fragment
 import android.util.Base64
@@ -12,15 +13,22 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.Spinner
+import android.widget.*
+import com.google.gson.Gson
 import com.whitedev.bkf.MainActivity
 import com.whitedev.bkf.R
 import com.whitedev.bkf.SpinnerItemSelectedListener
+import com.whitedev.bkf.Utils
+import com.whitedev.bkf.data.network.RestApi
+import com.whitedev.bkf.model.ServiceResponse
 import com.whitedev.bkf.model.control.ControlData
 import kotlinx.android.synthetic.main.fragment_control.*
+import kotlinx.android.synthetic.main.fragment_production.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 import java.io.ByteArrayOutputStream
 
 class ControlFragment : Fragment() {
@@ -125,16 +133,46 @@ class ControlFragment : Fragment() {
     }
 
     private fun sendControlData(encodedList: MutableList<String>) {
+
+        val token = "FQFD5165DQSVCD1QSV651DSFV65FD" //fixme delete this mock
+
         val controlObj = ControlData(
             StringBuilder().append(edt_order.text).append(spinner_landmark.selectedItem.toString()).toString(),
             edt_comment.text.toString(),
             encodedList
         )
 
-        //todo envoyez l'objet quand celui-ci sera complet
+        token.let { tok ->
+            val retrofit = Retrofit.Builder()
+                .baseUrl(Utils.checkBaseUrl(this.activity!!))
+                .addConverterFactory(GsonConverterFactory.create())
+                .build()
+            val service = retrofit.create(RestApi::class.java)
 
+            val gson = Gson()
+            val jsonInString = gson.toJson(controlObj)
 
-        resetAfterSendingData()
+            val call: Call<ServiceResponse> = service.insertControl(tok, jsonInString)
+
+            call.enqueue(object : Callback<ServiceResponse> {
+                override fun onResponse(call: Call<ServiceResponse>, response: Response<ServiceResponse>) {
+                    Handler().postDelayed({
+                        response.body()?.let { body ->
+                            if (body.status == "SUCCESS") {
+                                resetAfterSendingData()
+                            } else {
+                                Toast.makeText(activity, "Error", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }, 1500)
+                }
+
+                override fun onFailure(call: Call<ServiceResponse>, t: Throwable) {
+                    Log.e("test", "failure")
+                }
+            })
+
+        }
     }
 
     private fun checkFields(): Boolean {
@@ -190,5 +228,6 @@ class ControlFragment : Fragment() {
 
         tv_validation.setBackgroundColor(Color.BLUE)
 
+        //todo add deletion all pictures
     }
 }

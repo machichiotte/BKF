@@ -4,7 +4,9 @@ import com.whitedev.bkf.model.ServiceResponse
 import com.whitedev.bkf.model.atelier.ServiceResponseAtelier
 import io.reactivex.Observable
 import retrofit2.Call
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface RestApi {
@@ -24,4 +26,11 @@ interface RestApi {
 
     @GET("getListAtelier/{token}/{timestamp}")
     fun getListAtelier(@Path("token", encoded = true) token: String, @Path("timestamp", encoded = true) timestamp: Long): Call<ServiceResponseAtelier>
+
+    @POST("updateListData/{token}")
+    fun updateListData(@Path("token", encoded = true) token: String, @Body body: String): Call<ServiceResponse>
+
+    @POST("insertControle/{token}")
+    fun insertControl(@Path("token", encoded = true) token: String, @Body body: String): Call<ServiceResponse>
+
 }

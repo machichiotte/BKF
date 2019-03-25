@@ -40,6 +40,7 @@
                     android:layout_width="48dp"
                     android:layout_toStartOf="@+id/tv_week"
                     android:layout_height="48dp"
+                    android:visibility="gone"
                     android:src="@drawable/ic_chevron_left_black_24dp"/>
 
             <TextView
@@ -48,11 +49,11 @@
                     android:layout_height="wrap_content"
                     android:textColor="@android:color/black"
                     android:textSize="20sp"
-                    android:layout_centerInParent="true"
-                    android:text="Semaine 06"/>
+                    android:layout_centerInParent="true"/>
 
             <ImageView
                     android:id="@+id/iv_next"
+                    android:visibility="gone"
                     android:layout_width="48dp"
                     android:layout_toEndOf="@+id/tv_week"
                     android:layout_height="48dp"
